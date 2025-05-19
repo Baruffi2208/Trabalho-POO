@@ -44,8 +44,10 @@ public class Loja {
 						System.out.println("[8] DELETAR USUARIO");	
 						System.out.println("[9] ADICIONAR USUARIOS");
 						System.out.println("[10] CONSULTAR USUARIOS");
+						System.out.println("[11] EDITAR PRODUTOS");
+						System.out.println("[12] DELETAR PRODUTOS");
 					}			
-					System.out.println("[11] FAZER LOGOUT");
+					System.out.println("[13] FAZER LOGOUT");
 					System.out.println("[0] SAIR DO PROGRAMA");
 					System.out.println("=================================");	
 					escolha = sc.nextLine();
@@ -69,7 +71,13 @@ public class Loja {
 					    case("10"):
 					    	loja.consultarUsuarios();
 					    	break;
-					    case("11"):	   	
+					    case "11":
+					        loja.editarProduto(sc);
+					        break;
+					    case "12":
+					        loja.deletarProduto(sc);
+					        break;
+					    case("13"):	   	
 						    ResultadoLogin retorno = loja.menuUsuario(sc, escolha, loja);
 						    usuarioLogado = retorno.usuarioLogado;
 						    					    
@@ -355,6 +363,109 @@ public class Loja {
 				System.out.println("Nenhum usuario cadastrado");
 			}
 		}
+
+		public void cadastrarProduto(Scanner sc) {
+		    
+		    System.out.println("Digite o nome do produto:");
+		    String nome = sc.nextLine();
+		    System.out.println("Digite a descrição do produto:");
+		    String descricao = sc.nextLine();
+		    System.out.println("Digite o preço do produto:");
+		    double preco = sc.nextDouble();
+		    System.out.println("Digite a quantidade em estoque:");
+		    int quantidade = sc.nextInt();
+		    sc.nextLine(); // Limpar buffer
+		
+		    Produto produto = new Produto(nome, descricao, preco, quantidade);
+		
+		    for (int i = 0; i < estoque.length; i++) {
+		        if (estoque[i] == null) {
+		            estoque[i] = produto;
+		            System.out.println("Produto cadastrado com sucesso!");
+		            break;
+		        }
+		    }
+		}
+
+		public void consultarProdutos() {
+		    
+		    boolean encontrou = false;
+		    for (Produto p : estoque) {
+		        if (p != null) {
+		            System.out.println("=================================");
+		            System.out.println(p);
+		            encontrou = true;
+		        }
+		    }
+		    if (!encontrou) {
+		        System.out.println("Nenhum produto cadastrado.");
+		    }
+		}
+
+		public void editarProduto(Scanner sc) {
+		    
+		    consultarProdutos();
+		    System.out.println("Digite o ID do produto a ser editado:");
+		    int id = sc.nextInt();
+		    sc.nextLine();
+		
+		    for (Produto p : estoque) {
+		        if (p != null && p.getId() == id) {
+		            System.out.println("Editar nome (atual: " + p.getNome() + ")? S/N");
+		            if (sc.nextLine().equalsIgnoreCase("S")) {
+		                System.out.println("Novo nome:");
+		                p.setNome(sc.nextLine());
+		            }
+		
+		            System.out.println("Editar descrição (atual: " + p.getDescricao() + ")? S/N");
+		            if (sc.nextLine().equalsIgnoreCase("S")) {
+		                System.out.println("Nova descrição:");
+		                p.setDescricao(sc.nextLine());
+		            }
+		
+		            System.out.println("Editar preço (atual: R$" + p.getPreco() + ")? S/N");
+		            if (sc.nextLine().equalsIgnoreCase("S")) {
+		                System.out.println("Novo preço:");
+		                p.setPreco(sc.nextDouble());
+		                sc.nextLine();
+		            }
+		
+		            System.out.println("Editar quantidade (atual: " + p.getQuantidade() + ")? S/N");
+		            if (sc.nextLine().equalsIgnoreCase("S")) {
+		                System.out.println("Nova quantidade:");
+		                p.setQuantidade(sc.nextInt());
+		                sc.nextLine();
+		            }
+		
+		            System.out.println("Produto atualizado!");
+		            return;
+		        }
+		    }
+		
+		    System.out.println("Produto não encontrado.");
+		}
+
+		public void deletarProduto(Scanner sc) {
+		    
+		    consultarProdutos();
+		    System.out.println("Digite o ID do produto a ser excluído:");
+		    int id = sc.nextInt();
+		    sc.nextLine();
+		
+		    for (int i = 0; i < estoque.length; i++) {
+		        if (estoque[i] != null && estoque[i].getId() == id) {
+		            estoque[i] = null;
+		            System.out.println("Produto excluído com sucesso!");
+		            return;
+		        }
+		    }
+		
+		    System.out.println("Produto não encontrado.");
+		}
+
+
+
+
 	
 	
 }
