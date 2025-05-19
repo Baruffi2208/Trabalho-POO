@@ -10,6 +10,7 @@ class ResultadoLogin {
 public class Loja {
 		
 		private Usuario[] usuarios;
+		private Produto[] estoque = new Produto[100];
 		
 		public static void main(String[] args)
 		{								
